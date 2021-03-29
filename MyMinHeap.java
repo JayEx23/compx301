@@ -1,7 +1,7 @@
-class minHeap{
+class MyMinHeap{
 
     // The constructor for minHeap object
-    public minheap() {
+    public MyMinheap() {
         
     }
 }
