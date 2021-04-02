@@ -38,6 +38,11 @@ public class MyMinHeap {
         upheap();
     }
 
+    // peek
+    public String peek() {
+        return _minHeap[0];
+    }
+
     // Print heap array in raw format
     public void print() {
         System.out.println("Size: " + _size);
