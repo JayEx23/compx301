@@ -43,6 +43,22 @@ public class MyMinHeap {
         return _minHeap[0];
     }
 
+    // load values into heap without regard for heap order
+    // args -       values: a string collection to load into our heap
+    // returns -    if all values fit in array return 0 else return
+    //              index that was next in line but did not fit.
+    public int load(String []values) {
+        // Load values
+        for (int i = 0; i < _minHeap.length; i++) {
+            _minHeap[i] = values[i];
+        }
+        // Return status of values loaded
+        if (values.length > _size) {
+            return _size-1;
+        }
+        return 0;
+    }
+
     // Print heap array in raw format
     public void print() {
         System.out.println("Size: " + _size);
