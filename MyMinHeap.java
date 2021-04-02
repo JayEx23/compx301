@@ -65,6 +65,9 @@ public class MyMinHeap {
         String temp = new String(_minHeap[j]);
         _minHeap[j] = _minHeap[k];
         _minHeap[k] = temp;
+
+    }
+
     // peek
     public String peek() {
         return _minHeap[0];
