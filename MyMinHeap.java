@@ -31,6 +31,13 @@ public class MyMinHeap {
         }
     }
 
+    // Insert into heap
+    public void insert(String value) {
+        _size ++;
+        _minHeap[_size-1] = value;
+        upheap();
+    }
+
     // Print heap array in raw format
     public void print() {
         for (int i = 0; i < _size; i++) {
