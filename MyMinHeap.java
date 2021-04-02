@@ -40,7 +40,8 @@ public class MyMinHeap {
 
     // Print heap array in raw format
     public void print() {
-        for (int i = 0; i < _size; i++) {
+        System.out.println("Size: " + _size);
+        for (int i = 0; i < _minHeap.length; i++) {
             System.out.println(_minHeap[i]);
         }
     }
