@@ -20,7 +20,7 @@ public class MyMinHeap {
         // Iterate from bottom to top
         int i = _size;
         while (i > 1) {
-            int parentIndex = (i - 1) / 2; // "i-2" because our heap array's first item starts at index 0
+            int parentIndex = parentIndex(i);
             String current = new String(_minHeap[i]);
             String parent = new String(_minHeap[parentIndex]);
             if (current.compareTo(parent) < 0) { // If current is less than parent
@@ -65,6 +65,25 @@ public class MyMinHeap {
         String temp = new String(_minHeap[j]);
         _minHeap[j] = _minHeap[k];
         _minHeap[k] = temp;
+    // peek
+    public String peek() {
+        return _minHeap[0];
+    }
+
+    // load values into heap without regard for heap order
+    // args - values: a string collection to load into our heap
+    // returns - if all values fit in array return 0 else return
+    // index that was next in line but did not fit.
+    public int load(String[] values) {
+        // Load values
+        for (int i = 0; i < _minHeap.length; i++) {
+            _minHeap[i] = values[i];
+        }
+        // Return status of values loaded
+        if (values.length > _size) {
+            return _size - 1;
+        }
+        return 0;
     }
 
     // Print heap array in raw format
@@ -73,5 +92,20 @@ public class MyMinHeap {
         for (int i = 0; i < _minHeap.length; i++) {
             System.out.println(_minHeap[i]);
         }
+    }
+
+    // Get parent index
+    private int parentIndex(int current) {
+        return (current - 1) * 2; // "i-2" because our heap array's first item starts at index 0
+    }
+
+    // Get left child index
+    private int leftChildIndex(int current) {
+        return ((current + 1) * 2) - 1;
+    }
+
+    // Get right child index
+    private int rightChildIndex(int current) {
+        return ((current + 1) * 2);
     }
 }
