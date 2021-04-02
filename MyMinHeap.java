@@ -18,7 +18,7 @@ public class MyMinHeap {
         // Iterate from bottom to top
         int i = _size;
         while (i > 1) {
-            int parentIndex = (i-1)/2;
+            int parentIndex = parentIndex(i);
             String current = new String(_minHeap[i]);
             String parent = new String(_minHeap[parentIndex]);
             if (current.compareTo(parent) < 0) { // If current is less than parent
