@@ -89,6 +89,13 @@ public class MyMinHeap {
         return 0;
     }
 
+    // Replace top item in heap with new value
+    // args - value: the new value
+    public void replace(String value) {
+        remove();
+        insert(value);
+    }
+
     // Print heap array in raw format
     public void print() {
         System.out.println("Size: " + _size);
