@@ -96,6 +96,15 @@ public class MyMinHeap {
         insert(value);
     }
 
+    // Put heap array back into heap order
+    public void reheap() {
+        int i = _size/2; // _size and not (_size-1) because our heap starts at index=0
+        while (_size >= 0) {
+            downheap(i);
+            i--;
+        }
+    }
+
     // Print heap array in raw format
     public void print() {
         System.out.println("Size: " + _size);
