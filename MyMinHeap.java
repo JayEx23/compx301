@@ -9,7 +9,7 @@ public class MyMinHeap {
             _size = 32;
             _minHeap = new String[_size];
         } else {
-            _size = size;
+            _size = 0;
             _minHeap = new String[_size];
         }
 
@@ -50,12 +50,13 @@ public class MyMinHeap {
         // Load values
         for (int i = 0; i < _minHeap.length; i++) {
             _minHeap[i] = values[i];
+            _size ++;
         }
-        // Return status of values loaded
-        if (values.length > _size) {
-            return _size - 1;
+        // Return -1 if there was an overflow otherwise return 1
+        if (values.length > _minHeap.length) {
+            return -1;
         }
-        return 0;
+        return 1;
     }
 
     // Replace root in heap with new value and maintain heap order
