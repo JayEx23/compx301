@@ -1,7 +1,3 @@
-import java.util.Currency;
-
-import jdk.nashorn.internal.ir.ReturnNode;
-
 public class MyMinHeap {
 
     private int _size;
