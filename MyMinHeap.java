@@ -23,7 +23,7 @@ public class MyMinHeap {
     }
 
     // Remove from heap
-    public void remove(String value) {
+    public void remove() {
         int root = 0;
         int tail = _size;
 
