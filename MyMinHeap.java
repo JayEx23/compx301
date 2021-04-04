@@ -67,7 +67,7 @@ public class MyMinHeap {
 
     // Put heap array back into heap order
     public void reheap() {
-        int i = _size / 2; // _size and not (_size-1) because our heap starts at index=0
+        int i = lastParentIndex();
         while (_size >= 0) {
             downheap(i);
             i--;
@@ -109,7 +109,7 @@ public class MyMinHeap {
 
         try {
             // Iterate from the given index
-            while (current < _size) {
+            while (current < lastParentIndex()) {
                 if (!isLeaf(current)) { // If current is not a leaf node
                     // check if current is larger than both its children
                     if (curr.compareTo(leftChild) > 0 || curr.compareTo(rightChild) > 0) {
@@ -155,9 +155,14 @@ public class MyMinHeap {
 
     // checks if the current index is a leaf node (i.e no children)
     private boolean isLeaf(int current) {
-        if (current > (int) Math.floor(_size / 2) && current <= _size) {
+        if (current > lastParentIndex() && current <= _size) {
             return true;
         }
         return false;
+    }
+
+    // Get index of last parent item in heap
+    private int lastParentIndex() {
+        return _size / 2; // _size and not (_size-1) because our heap starts at index=0
     }
 }
