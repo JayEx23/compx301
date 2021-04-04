@@ -58,11 +58,11 @@ public class MyMinHeap {
         return 0;
     }
 
-    // Replace top item in heap with new value
+    // Replace root in heap with new value and maintain heap order
     // args - value: the new value
     public void replace(String value) {
-        remove();
-        insert(value);
+        _minHeap[0] = value;
+        downheap(0);
     }
 
     // Put heap array back into heap order
