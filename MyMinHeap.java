@@ -15,6 +15,73 @@ public class MyMinHeap {
 
     }
 
+    // Insert into heap
+    public void insert(String value) {
+        _size++;
+        _minHeap[_size - 1] = value;
+        upheap();
+    }
+
+    // Remove from heap
+    public void remove(String value) {
+        int root = 0;
+        int tail = _size;
+
+        try {
+            if (_size > 0) {
+                swap(root, tail);
+                _size--;
+            }
+        } catch (Exception x) {
+            System.err.println(x);
+        }
+    }
+
+    // peek
+    public String peek() {
+        return _minHeap[0];
+    }
+
+    // load values into heap without regard for heap order
+    // args - values: a string collection to load into our heap
+    // returns - if all values fit in array return 0 else return
+    // index that was next in line but did not fit.
+    public int load(String[] values) {
+        // Load values
+        for (int i = 0; i < _minHeap.length; i++) {
+            _minHeap[i] = values[i];
+        }
+        // Return status of values loaded
+        if (values.length > _size) {
+            return _size - 1;
+        }
+        return 0;
+    }
+
+    // Replace top item in heap with new value
+    // args - value: the new value
+    public void replace(String value) {
+        remove();
+        insert(value);
+    }
+
+    // Put heap array back into heap order
+    public void reheap() {
+        int i = _size / 2; // _size and not (_size-1) because our heap starts at index=0
+        while (_size >= 0) {
+            downheap(i);
+            i--;
+        }
+    }
+
+    // Print heap array in raw format
+    public void print() {
+        System.out.println("Size: " + _size);
+        for (int i = 0; i < _minHeap.length; i++) {
+            System.out.println(_minHeap[i]);
+        }
+    }
+
     // Upheap array
     private void upheap() {
         // Iterate from bottom to top
@@ -64,78 +131,11 @@ public class MyMinHeap {
 
     }
 
-    // Insert into heap
-    public void insert(String value) {
-        _size++;
-        _minHeap[_size - 1] = value;
-        upheap();
-    }
-
-    // Remove from heap
-    public void remove(String value) {
-        int root = 0;
-        int tail = _size;
-
-        try {
-            if (_size > 0) {
-                swap(root, tail);
-                _size--;
-            }
-        } catch (Exception x) {
-            System.err.println(x);
-        }
-    }
-
     // Swaps the position of 2 index/items in the array
     private void swap(int j, int k) {
         String temp = new String(_minHeap[j]);
         _minHeap[j] = _minHeap[k];
         _minHeap[k] = temp;
-    }
-
-    // peek
-    public String peek() {
-        return _minHeap[0];
-    }
-
-    // load values into heap without regard for heap order
-    // args - values: a string collection to load into our heap
-    // returns - if all values fit in array return 0 else return
-    // index that was next in line but did not fit.
-    public int load(String[] values) {
-        // Load values
-        for (int i = 0; i < _minHeap.length; i++) {
-            _minHeap[i] = values[i];
-        }
-        // Return status of values loaded
-        if (values.length > _size) {
-            return _size - 1;
-        }
-        return 0;
-    }
-
-    // Replace top item in heap with new value
-    // args - value: the new value
-    public void replace(String value) {
-        remove();
-        insert(value);
-    }
-
-    // Put heap array back into heap order
-    public void reheap() {
-        int i = _size / 2; // _size and not (_size-1) because our heap starts at index=0
-        while (_size >= 0) {
-            downheap(i);
-            i--;
-        }
-    }
-
-    // Print heap array in raw format
-    public void print() {
-        System.out.println("Size: " + _size);
-        for (int i = 0; i < _minHeap.length; i++) {
-            System.out.println(_minHeap[i]);
-        }
     }
 
     // Get parent index
