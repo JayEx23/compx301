@@ -74,11 +74,17 @@ public class MyMinHeap {
         }
     }
 
-    // Print heap array in raw format
+    // Print heap array in debug format
     public void print() {
         System.out.println("Size: " + _size);
         for (int i = 0; i < _minHeap.length; i++) {
-            System.out.println(_minHeap[i]);
+            if (i == _size) {
+                System.out.println("---size---"); // Visually display where size variable is in effect.
+            }            
+            // Print:
+            System.out.print("[" + i + "]\t"); // index
+            System.out.print("[" + (isLeaf(i) ? "L" : "P") + "]\t"); // lead or parent
+            System.out.println(_minHeap[i]); // item
         }
     }
 
