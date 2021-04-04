@@ -1,6 +1,6 @@
 public class DistributeRuns {
 
-    public DistributeRuns() {
+    public DistributeRuns(int num) {
 
     }
 
