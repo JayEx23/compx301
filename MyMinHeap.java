@@ -83,7 +83,7 @@ public class MyMinHeap {
             }            
             // Print:
             System.out.print("[" + i + "]\t"); // index
-            System.out.print("[" + (isLeaf(i) ? "L" : "P") + "]\t"); // lead or parent
+            System.out.print("[" + (isLeaf(i) ? "L" : "P") + "]\t"); // leaf or parent
             System.out.println(_minHeap[i]); // item
         }
     }
