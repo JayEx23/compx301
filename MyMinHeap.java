@@ -1,3 +1,7 @@
+import java.util.Currency;
+
+import jdk.nashorn.internal.ir.ReturnNode;
+
 public class MyMinHeap {
 
     private int _size;
@@ -34,7 +38,33 @@ public class MyMinHeap {
         }
     }
 
-    private void downheap(int index) {
+    // downheap from provided index
+    private void downheap(int current) {
+        String leftChild = _minHeap[leftChildIndex(current)];
+        String rightChild = _minHeap[rightChildIndex(current)];
+        String curr = _minHeap[current];
+
+        try {
+            // Iterate from the given index
+            while (current < _size) {
+                if (!isLeaf(current)) { // If current is not a leaf node
+                    // check if current is larger than both its children
+                    if (curr.compareTo(leftChild) > 0 || curr.compareTo(rightChild) > 0) {
+                        if (leftChild.compareTo(rightChild) < 0) { // check if left child is smaller than right
+                            // swap current with leftChild if so
+                            swap(current, leftChildIndex(current));
+                        } else {
+                            // swap current with rightChild if not
+                            swap(current, rightChildIndex(current));
+                        }
+                    }
+                } else {
+                    return; // downheap complete
+                }
+            }
+        } catch (Exception x) {
+            System.err.println(x);
+        }
 
     }
 
@@ -97,7 +127,7 @@ public class MyMinHeap {
 
     // Put heap array back into heap order
     public void reheap() {
-        int i = _size/2; // _size and not (_size-1) because our heap starts at index=0
+        int i = _size / 2; // _size and not (_size-1) because our heap starts at index=0
         while (_size >= 0) {
             downheap(i);
             i--;
@@ -125,5 +155,13 @@ public class MyMinHeap {
     // Get right child index
     private int rightChildIndex(int current) {
         return ((current + 1) * 2);
+    }
+
+    // checks if the current index is a leaf node (i.e no children)
+    private boolean isLeaf(int current) {
+        if (current > (int) Math.floor(_size / 2) && current <= _size) {
+            return true;
+        }
+        return false;
     }
 }
