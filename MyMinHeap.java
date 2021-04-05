@@ -1,4 +1,4 @@
-public class MyMinHeap {
+public class MyMinHeap implements IMinHeap {
 
     private int _size;
     private String[] _minHeap;
@@ -30,7 +30,7 @@ public class MyMinHeap {
     public void remove() {
         if (_size > 0) {
             int root = 0;
-            int tail = _size-1;
+            int tail = _size - 1;
 
             swap(root, tail);
             _size--;
@@ -55,7 +55,7 @@ public class MyMinHeap {
                 break;
             }
             _minHeap[i] = values[i];
-            _size ++;
+            _size++;
         }
         if (values.length > _minHeap.length) {
             System.out.println("Warning: minheap overflow -- could only load " + _size + " values!");
@@ -71,7 +71,7 @@ public class MyMinHeap {
 
     // Put heap array back into heap order
     public void reheap() {
-        _size = _minHeap.length; // Reset size to be length of space available in heap
+
         int i = lastParentIndex();
         while (i >= 0) {
             downheap(i);
@@ -85,7 +85,7 @@ public class MyMinHeap {
         for (int i = 0; i < _minHeap.length; i++) {
             if (i == _size) {
                 System.out.println("---size---"); // Visually display where size variable is in effect.
-            }            
+            }
             // Print:
             System.out.print("[" + i + "]\t"); // index
             System.out.print("[" + (isLeaf(i) ? "L" : "P") + "]\t"); // leaf or parent
@@ -96,7 +96,7 @@ public class MyMinHeap {
     // Upheap array
     private void upheap() {
         // Iterate from bottom to top
-        int i = _size-1;
+        int i = _size - 1;
         while (i > 0) {
             int parentIndex = parentIndex(i);
             String current = new String(_minHeap[i]);
@@ -168,6 +168,6 @@ public class MyMinHeap {
 
     // Get index of last parent item in heap
     private int lastParentIndex() {
-        return parentIndex(_size-1); // (_size-1) instead of _size because our heap starts at index=0
+        return parentIndex(_size - 1); // (_size-1) instead of _size because our heap starts at index=0
     }
 }
