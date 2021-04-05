@@ -28,10 +28,10 @@ public class MyMinHeap {
 
     // Remove from heap
     public void remove() {
-        int root = 0;
-        int tail = _size-1;
-
         if (_size > 0) {
+            int root = 0;
+            int tail = _size-1;
+
             swap(root, tail);
             _size--;
             downheap(root);
@@ -117,7 +117,7 @@ public class MyMinHeap {
             int rightChildIndex = rightChildIndex(current);
             int replaceIndex = leftChildIndex;
 
-            if (_size > rightChildIndex(current)) { // We know that there is a child, check if there is no right child
+            if (_size > rightChildIndex(current)) { // We know that there is a child, check right child exists
                 if (_minHeap[rightChildIndex].compareTo(_minHeap[leftChildIndex]) < 0) {
                     replaceIndex = rightChildIndex;
                 }
@@ -125,6 +125,7 @@ public class MyMinHeap {
 
             if (_minHeap[current].compareTo(_minHeap[replaceIndex]) > 0) {
                 swap(current, replaceIndex);
+                current = replaceIndex;
             } else {
                 return; // Downheap complete
             }
@@ -163,6 +164,6 @@ public class MyMinHeap {
 
     // Get index of last parent item in heap
     private int lastParentIndex() {
-        return (_size - 1) / 2; // (_size-1) instead of _size because our heap starts at index=0
+        return parentIndex(_size-1); // (_size-1) instead of _size because our heap starts at index=0
     }
 }
