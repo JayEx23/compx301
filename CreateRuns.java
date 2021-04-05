@@ -25,7 +25,12 @@ public class CreateRuns {
             System.out.println(msgUsage);
             return;
         }
-        System.out.println(heapSize); // !Debug print statement
+
+        for (int i = 0; i < 26; i++) {
+            
+
+        }
+
         load(heapSize);
     }
 
@@ -35,50 +40,55 @@ public class CreateRuns {
     public static void load(int heapSize) {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(System.out));
-        MyMinHeap selectionSorter = new MyMinHeap(heapSize);
+        MyMinHeap minheap = new MyMinHeap(heapSize);
+        String[] lines = new String[heapSize];
+        int heapCount = 0;
         try {
-            // Read until end of standard input
-            // e.g. `cat test.txt | java CreatRuns 10`
-            // should read all lines from test.txt and then stop
-            String line = new String(reader.readLine()); // Get first line
-            int counter = 0;
-            while (line != null) {
-                if (counter <= heapSize) {
-                    // Load initial values into heap
-                    selectionSorter.insert(line);
-                    counter ++;
-                } else {
-                    selectinSort(selectionSorter, counter);         
+            // Load initial lines into heap
+            for (int i = 0; i < heapSize; i++) {
+                String line = reader.readLine();
+                if (line != null) {
+                    lines[i] = line;
+                    heapCount ++;
                 }
-                line = reader.readLine(); // Get next line
+                else { break; }
             }
+            minheap.load(lines);
+            minheap.reheap();
+            
+            String line = minheap.peek();
+            String prevLine = line;
+            while (line != "{EOF}") {
+                if (line.compareTo(prevLine) >= 0) {
+                    writer.write(line + "\n");
+                    String newLine = reader.readLine();
+                    if (newLine != null) {
+                        minheap.replace(newLine);
+                    } else {
+                        minheap.replace("{EOF}");
+                    }
+                } else {
+                    minheap.remove();
+                    heapCount --;
+                }
+
+                if (heapCount < 1) {
+                    writer.write("{RUN}\n");
+                    heapCount = heapSize;
+                    minheap.resetSize();
+                    minheap.reheap();
+                }
+
+                // Get values for next loop
+                prevLine = line;
+                line = minheap.peek();
+            }
+
+            writer.flush();
             reader.close();
             writer.close();
         } catch(Exception e) {
             System.out.println(e);
-        }
-    }
-
-    public static void selectinSort(MyMinHeap selectionSorter, int counter, String line) {
-        // Start creating a run
-        String peek = new String(selectionSorter.peek());
-        String prevPeek = new String(peek);
-        while (peek != null && counter > 0) {
-            if (peek.compareTo(prevPeek) >= 0) {
-                // Add to run
-                selectionSorter.replace(line);
-                line = reader.readLine();
-                writer.write(peek);
-            } else {
-                // Save for a next run
-                selectionSorter.remove();
-                counter --;
-                if (counter == 0) {
-                    selectionSorter.reheap();
-                }
-            }
-            prevPeek = peek;
-            peek = selectionSorter.peek();
         }
     }
 }

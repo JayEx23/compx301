@@ -78,6 +78,14 @@ public class MyMinHeap implements IMinHeap {
         }
     }
 
+    // Reset minheap size
+    public void resetSize() {
+        for (int i = 0; i < _minHeap.length; i++) {
+            if (_minHeap[i] != null) { _size ++; }
+            else { break; }
+        }
+    }
+
     // Print heap array in debug format
     public void print() {
         System.out.println("Size: " + _size);
