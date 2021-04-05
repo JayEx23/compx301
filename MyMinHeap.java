@@ -68,8 +68,9 @@ public class MyMinHeap {
 
     // Put heap array back into heap order
     public void reheap() {
+        _size = _minHeap.length; // Reset size to be length of space available in heap
         int i = lastParentIndex();
-        while (_size >= 0) {
+        while (i >= 0) {
             downheap(i);
             i--;
         }
