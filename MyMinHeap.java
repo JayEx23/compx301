@@ -106,40 +106,27 @@ public class MyMinHeap {
         }
     }
 
-    // downheap from provided index
+    // Downheap from provided index
     private void downheap(int current) {
         // Iterate from the given index
+        if (_size < 2) {
+            return;
+        }
         while (current <= lastParentIndex()) {
-            String curr = _minHeap[current];
-            String leftChild = _minHeap[leftChildIndex(current)];
+            int leftChildIndex = leftChildIndex(current);
+            int rightChildIndex = rightChildIndex(current);
+            int replaceIndex = leftChildIndex;
 
-            if (_size <= rightChildIndex(current)) { // We know that there is a child, check if there is no right child
-                if (curr.compareTo(leftChild) > 0) { // check if current is greater than right child
-                    // swap current with leftChild if so
-                    int leftChildIndex = leftChildIndex(current);
-                    swap(current, leftChildIndex);
-                    current = leftChildIndex;
+            if (_size > rightChildIndex(current)) { // We know that there is a child, check if there is no right child
+                if (_minHeap[rightChildIndex].compareTo(_minHeap[leftChildIndex]) < 0) {
+                    replaceIndex = rightChildIndex;
                 }
-                return;
             }
-            
-            String rightChild = _minHeap[rightChildIndex(current)];
-            
-            // check if current is larger than both its children
-            if (curr.compareTo(leftChild) > 0 || curr.compareTo(rightChild) > 0) { // If current is greater than a child
-                if (leftChild.compareTo(rightChild) < 0) { // check if left child is smaller than right
-                    // swap current with leftChild if so
-                    int leftChildIndex = leftChildIndex(current);
-                    swap(current, leftChildIndex);
-                    current = leftChildIndex;
-                } else {
-                    // swap current with rightChild if not
-                    int rightChildIndex = rightChildIndex(current);
-                    swap(current, rightChildIndex);
-                    current = rightChildIndex;
-                }
+
+            if (_minHeap[current].compareTo(_minHeap[replaceIndex]) > 0) {
+                swap(current, replaceIndex);
             } else {
-                return; // downheap complete
+                return; // Downheap complete
             }
         }
     }
