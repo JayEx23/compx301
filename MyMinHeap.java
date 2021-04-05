@@ -29,15 +29,14 @@ public class MyMinHeap {
     // Remove from heap
     public void remove() {
         int root = 0;
-        int tail = _size;
+        int tail = _size-1;
 
-        try {
-            if (_size > 0) {
-                swap(root, tail);
-                _size--;
-            }
-        } catch (Exception x) {
-            System.err.println(x);
+        if (_size > 0) {
+            swap(root, tail);
+            _size--;
+            downheap(root);
+        } else {
+            System.out.println("Warning: heap is empty -- could not complete remove operation");
         }
     }
 
@@ -49,6 +48,7 @@ public class MyMinHeap {
     // load values into heap without regard for heap order
     // args - values: a string collection to load into our heap
     public void load(String[] values) {
+        _size = 0;
         // Load values
         for (int i = 0; i < _minHeap.length; i++) {
             _minHeap[i] = values[i];
@@ -108,32 +108,40 @@ public class MyMinHeap {
 
     // downheap from provided index
     private void downheap(int current) {
-        String leftChild = _minHeap[leftChildIndex(current)];
-        String rightChild = _minHeap[rightChildIndex(current)];
-        String curr = _minHeap[current];
+        // Iterate from the given index
+        while (current <= lastParentIndex()) {
+            String curr = _minHeap[current];
+            String leftChild = _minHeap[leftChildIndex(current)];
 
-        try {
-            // Iterate from the given index
-            while (current < lastParentIndex()) {
-                if (!isLeaf(current)) { // If current is not a leaf node
-                    // check if current is larger than both its children
-                    if (curr.compareTo(leftChild) > 0 || curr.compareTo(rightChild) > 0) {
-                        if (leftChild.compareTo(rightChild) < 0) { // check if left child is smaller than right
-                            // swap current with leftChild if so
-                            swap(current, leftChildIndex(current));
-                        } else {
-                            // swap current with rightChild if not
-                            swap(current, rightChildIndex(current));
-                        }
-                    }
-                } else {
-                    return; // downheap complete
+            if (_size <= rightChildIndex(current)) { // We know that there is a child, check if there is no right child
+                if (curr.compareTo(leftChild) > 0) { // check if current is greater than right child
+                    // swap current with leftChild if so
+                    int leftChildIndex = leftChildIndex(current);
+                    swap(current, leftChildIndex);
+                    current = leftChildIndex;
                 }
+                return;
             }
-        } catch (Exception x) {
-            System.err.println(x);
+            
+            String rightChild = _minHeap[rightChildIndex(current)];
+            
+            // check if current is larger than both its children
+            if (curr.compareTo(leftChild) > 0 || curr.compareTo(rightChild) > 0) { // If current is greater than a child
+                if (leftChild.compareTo(rightChild) < 0) { // check if left child is smaller than right
+                    // swap current with leftChild if so
+                    int leftChildIndex = leftChildIndex(current);
+                    swap(current, leftChildIndex);
+                    current = leftChildIndex;
+                } else {
+                    // swap current with rightChild if not
+                    int rightChildIndex = rightChildIndex(current);
+                    swap(current, rightChildIndex);
+                    current = rightChildIndex;
+                }
+            } else {
+                return; // downheap complete
+            }
         }
-
     }
 
     // Swaps the position of 2 index/items in the array
