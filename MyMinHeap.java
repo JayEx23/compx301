@@ -71,7 +71,6 @@ public class MyMinHeap implements IMinHeap {
 
     // Put heap array back into heap order
     public void reheap() {
-
         int i = lastParentIndex();
         while (i >= 0) {
             downheap(i);
