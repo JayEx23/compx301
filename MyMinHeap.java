@@ -51,6 +51,9 @@ public class MyMinHeap {
         _size = 0;
         // Load values
         for (int i = 0; i < _minHeap.length; i++) {
+            if (i >= values.length) {
+                break;
+            }
             _minHeap[i] = values[i];
             _size ++;
         }
