@@ -9,8 +9,8 @@ public class MyMinHeap {
             _size = 32;
             _minHeap = new String[_size];
         } else {
+            _minHeap = new String[size];
             _size = 0;
-            _minHeap = new String[_size];
         }
 
     }
@@ -92,8 +92,8 @@ public class MyMinHeap {
     // Upheap array
     private void upheap() {
         // Iterate from bottom to top
-        int i = _size;
-        while (i > 1) {
+        int i = _size-1;
+        while (i > 0) {
             int parentIndex = parentIndex(i);
             String current = new String(_minHeap[i]);
             String parent = new String(_minHeap[parentIndex]);
@@ -147,17 +147,17 @@ public class MyMinHeap {
 
     // Get parent index
     private int parentIndex(int current) {
-        return (current - 1) * 2; // "i-2" because our heap array's first item starts at index 0
+        return (current - 1) / 2; // (current-1) because our heap array's first item starts at index 0
     }
 
     // Get left child index
     private int leftChildIndex(int current) {
-        return ((current + 1) * 2) - 1;
+        return ((current + 1) * 2) - 1; // (current+1*2)-1 because our heap array's first item starts at index 0
     }
 
     // Get right child index
     private int rightChildIndex(int current) {
-        return ((current + 1) * 2);
+        return ((current + 1) * 2); // (current+1)*2 because our heap array's first item starts at index 0
     }
 
     // checks if the current index is a leaf node (i.e no children)
@@ -170,6 +170,6 @@ public class MyMinHeap {
 
     // Get index of last parent item in heap
     private int lastParentIndex() {
-        return _size / 2; // _size and not (_size-1) because our heap starts at index=0
+        return (_size - 1) / 2; // (_size-1) instead of _size because our heap starts at index=0
     }
 }
