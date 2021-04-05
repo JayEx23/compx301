@@ -17,9 +17,13 @@ public class MyMinHeap {
 
     // Insert into heap
     public void insert(String value) {
-        _size++;
-        _minHeap[_size - 1] = value;
-        upheap();
+        if (_size == _minHeap.length) {
+            System.out.println("Warning: minheap is full -- could not insert value!");
+        } else {
+            _size++;
+            _minHeap[_size - 1] = value;
+            upheap();
+        }
     }
 
     // Remove from heap
@@ -44,19 +48,15 @@ public class MyMinHeap {
 
     // load values into heap without regard for heap order
     // args - values: a string collection to load into our heap
-    // returns - if all values fit in array return 0 else return
-    // index that was next in line but did not fit.
-    public int load(String[] values) {
+    public void load(String[] values) {
         // Load values
         for (int i = 0; i < _minHeap.length; i++) {
             _minHeap[i] = values[i];
             _size ++;
         }
-        // Return -1 if there was an overflow otherwise return 1
         if (values.length > _minHeap.length) {
-            return -1;
+            System.out.println("Warning: minheap overflow -- could only load " + _size + " values!");
         }
-        return 1;
     }
 
     // Replace root in heap with new value and maintain heap order
