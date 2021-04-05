@@ -98,10 +98,8 @@ public class MyMinHeap {
             String current = new String(_minHeap[i]);
             String parent = new String(_minHeap[parentIndex]);
             if (current.compareTo(parent) < 0) { // If current is less than parent
-                // Perform swap
-                // _minHeap[parentIndex] = current;
-                // _minHeap[i] = parent;
                 swap(parentIndex, i);
+                i = parentIndex;
             } else {
                 return; // Upheap complete
             }
