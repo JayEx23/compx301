@@ -89,7 +89,7 @@ public class MyMinHeap implements IMinHeap {
     public void reset() {
         for (int i = 0; i < _minHeap.length; i++) {
             if (_minHeap[i] != null) {
-                _minHeap[_size] = _minHeap[i];
+                swap(_size, i);
                 _size ++;
             }
         }
