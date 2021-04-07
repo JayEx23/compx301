@@ -1,12 +1,8 @@
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.File;
 import java.io.FileWriter;
-import java.io.FileInputStream;
 import java.io.FileReader;
-import java.io.IOException;
+
 
 public class DistributeRuns {
     int _fileNum;
@@ -23,7 +19,6 @@ public class DistributeRuns {
     public void createFile() {
         BufferedReader reader = null;
         BufferedWriter writer = null;
-        File file = null;
         FileWriter fw = null;
         String fileName = "run";
         int fileFlag = 1;
@@ -34,38 +29,35 @@ public class DistributeRuns {
 
             // create num of files specified
             for(int i = 1; i <= _fileNum; i++) {
-                file = new File(fileName + i);
-                if(!file.exists()) {
-                    file.createNewFile();
-                }
+                writer = new BufferedWriter(new FileWriter(fileName + i));
+                writer.close();
             }
-
+            fw = new FileWriter(fileName+fileFlag);
+            writer = new BufferedWriter(fw);
             // while there are still lines to read
             while(line != null) {
+
                 // check if we are not at the end of a run
                 if(!line.equals("{RUN}")) {
                     // check if we are in the right file
-                    if(fileFlag <= _fileNum) {
-                        file = new File(fileName+fileFlag);
-                        fw = new FileWriter(file);
-                        writer = new BufferedWriter(fw);
-                        writer.write(line);
-                    } 
-                    else { // reset fileFlag back to start
-                        fileFlag = _fileNum;
-                    }
-
+                    writer.write(line + "\n");
+                    writer.flush();
                 } 
                 else {
-                    file = new File(fileName+fileFlag);
-                    fw = new FileWriter(file);
+                    writer.write("{RUN}" + "\n");
+                    writer.flush();
+                    if(fileFlag < _fileNum) {
+                        fileFlag++;
+                    } 
+                    else { // reset fileFlag back to start
+                        fileFlag = 1;
+                    }
+                    fw = new FileWriter(fileName+fileFlag, true);
                     writer = new BufferedWriter(fw);
-                    writer.write("{RUN}");
-                    fileFlag++;
+                    
                 }
+                line = reader.readLine();
             }
-
-            writer.flush();
             reader.close();
             writer.close();
         } catch (Exception e) {
