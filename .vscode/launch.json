@@ -4,6 +4,16 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+    
+
+        {
+            "type": "java",
+            "name": "Launch MergeRuns",
+            "request": "launch",
+            "mainClass": "MergeRuns",
+            "projectName": "compx301_Assignment_1_a0420498",
+            "args": ["2"]
+        },
         {
             "type": "java",
             "name": "Launch Current File",

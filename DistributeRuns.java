@@ -5,6 +5,7 @@ import java.io.OutputStreamWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
 
 public class DistributeRuns {
@@ -26,8 +27,9 @@ public class DistributeRuns {
         FileWriter fw = null;
         String fileName = "run";
         int fileFlag = 1;
+        
         try{
-            reader = new BufferedReader(new InputStreamReader(System.in));
+            reader = new BufferedReader(new FileReader("./runs.txt"));
             String line = reader.readLine();
 
             // create num of files specified
@@ -44,17 +46,28 @@ public class DistributeRuns {
                 if(!line.equals("{RUN}")) {
                     // check if we are in the right file
                     if(fileFlag <= _fileNum) {
+                        file = new File(fileName+fileFlag);
                         fw = new FileWriter(file);
                         writer = new BufferedWriter(fw);
+                        writer.write(line);
                     } 
                     else { // reset fileFlag back to start
                         fileFlag = _fileNum;
                     }
 
                 } 
-                else if(line.equals("{RUNS}")) {fileFlag++;}
+                else {
+                    file = new File(fileName+fileFlag);
+                    fw = new FileWriter(file);
+                    writer = new BufferedWriter(fw);
+                    writer.write("{RUN}");
+                    fileFlag++;
+                }
             }
 
+            writer.flush();
+            reader.close();
+            writer.close();
         } catch (Exception e) {
             System.out.println(e);
         }
