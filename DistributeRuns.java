@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
+import java.io.InputStreamReader;
 import java.io.FileReader;
 
 
@@ -24,7 +25,7 @@ public class DistributeRuns {
         int fileFlag = 1;
         
         try{
-            reader = new BufferedReader(new FileReader("./runs.txt"));
+            reader = new BufferedReader(new InputStreamReader(System.in));
             String line = reader.readLine();
 
             // create num of files specified
