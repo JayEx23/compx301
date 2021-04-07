@@ -1,5 +1,6 @@
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
@@ -33,7 +34,14 @@ public class CreateRuns {
     // Read standard input
     //
     public static void load(int heapSize) {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        // BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new FileReader("./test.txt"));
+        } catch(Exception e) {
+            System.out.println(e);
+            return;
+        }
         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(System.out));
         MyMinHeap minheap = new MyMinHeap(heapSize);
         String[] lines = new String[heapSize];
@@ -58,6 +66,8 @@ public class CreateRuns {
                     minheap.replace(newLine);
                 } else {
                     minheap.remove();
+                    line = minheap.peek();
+                    continue;
                 }
 
                 if (minheap.getSize() == 0) {
