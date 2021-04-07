@@ -66,7 +66,9 @@ public class MyMinHeap implements IMinHeap {
     // args - value: the new value
     public void replace(String value) {
         _minHeap[0] = value;
-        downheap(0);
+        if (value == null) {
+            remove();
+        } else { downheap(0); }
     }
 
     // Put heap array back into heap order
@@ -75,6 +77,21 @@ public class MyMinHeap implements IMinHeap {
         while (i >= 0) {
             downheap(i);
             i--;
+        }
+    }
+
+    // Get size
+    public int getSize() {
+        return _size;
+    }
+
+    // Reset minheap size
+    public void reset() {
+        for (int i = 0; i < _minHeap.length; i++) {
+            if (_minHeap[i] != null) {
+                _minHeap[_size] = _minHeap[i];
+                _size ++;
+            }
         }
     }
 
@@ -137,7 +154,7 @@ public class MyMinHeap implements IMinHeap {
 
     // Swaps the position of 2 index/items in the array
     private void swap(int j, int k) {
-        String temp = new String(_minHeap[j]);
+        String temp = _minHeap[j];
         _minHeap[j] = _minHeap[k];
         _minHeap[k] = temp;
     }
