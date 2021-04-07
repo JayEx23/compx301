@@ -59,15 +59,18 @@ public class CreateRuns {
             
             String line = minheap.peek();
             String prevLine = line;
-            while (line != null) {
+            while (line != null) {                
                 if (line.compareTo(prevLine) >= 0) {
                     writer.write(line + "\n");
                     String newLine = reader.readLine();
                     minheap.replace(newLine);
+
+                    // Get values for next loop
+                    prevLine = line;
+                    line = minheap.peek();
                 } else {
                     minheap.remove();
                     line = minheap.peek();
-                    continue;
                 }
 
                 if (minheap.getSize() == 0) {
@@ -77,12 +80,7 @@ public class CreateRuns {
                     
                     line = minheap.peek();
                     prevLine = line;
-                    continue;
                 }
-
-                // Get values for next loop
-                prevLine = line;
-                line = minheap.peek();
             }
 
             writer.flush();
