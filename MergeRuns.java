@@ -2,7 +2,6 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.Writer;
 
 public class MergeRuns {
 
@@ -20,70 +19,130 @@ public class MergeRuns {
             merge(numFiles, fName);
         } catch (Exception x) {
             System.out.println(x);
+            x.printStackTrace();
         }
     }
     
     // Merge temporary run files
     public static void merge(int numFiles, String fName) throws Exception {
-        BufferedReader[] readers = new BufferedReader[numFiles];
+        BufferedReader[][] readers = new BufferedReader[2][numFiles];
         int[] activeReaders = new int[numFiles];
-        // Create file reader for each file
-        for (int fNum = 0; fNum < numFiles; fNum++) {
-            readers[fNum] = new BufferedReader(new FileReader("./" + fName + (fNum+1))); // Assume file is in current directory
-            activeReaders[fNum] = 1; // Give reader active flag
-        }
+
         // Create output file for each file
-        for (int fNum = 1; fNum <= numFiles; fNum++) {
-            new BufferedWriter(new FileWriter("./" + fName + (numFiles + fNum)));
-        }
-        
-        // Create merge minheap
-        MyMergeMinHeap mergeMinHeap = new MyMergeMinHeap(numFiles);
+        for (int fNum = 0; fNum < numFiles; fNum++) {
+            new BufferedWriter(new FileWriter("./" + fName + ((fNum+1)+numFiles)));
 
-        // Read intial values from each initial run into heap
-        for (int rNum = 0; rNum < readers.length; rNum++) {
-            // Insert line from run and filename into heap
-            mergeMinHeap.insert(new String[] {readers[rNum].readLine(), fName + rNum});
+            activeReaders[fNum] = 1; // Give reader active flag
+
+            // Create file reader for each file
+            readers[0][fNum] = new BufferedReader(new FileReader("./" + fName + (fNum+1))); // Assume file is in current directory
+            readers[1][fNum] = new BufferedReader(new FileReader("./" + fName + ((fNum+1)+numFiles))); // Assume file is in current directory
         }
 
-        // Get smallest value from heap
-        String value = mergeMinHeap.peek();
-        String source = mergeMinHeap.peekSource();
-        int  fNum = Integer.parseInt(source.substring(source.length() - 1, source.length()));
+        // Initialize required references for temp files
+        int[][] fileNums = new int[2][numFiles];
+        for (int i = 0; i < fileNums[0].length; i++) {
+            fileNums[0][i] = (i+1);
+        }
+        for (int i = 0; i < fileNums[1].length; i++) {
+            fileNums[1][i] = (i+1)+numFiles;
+        }
 
-        int currentRunFile = 0;
+        int outputSetIndex = 1;
+        int outputFileIndex = 0;
 
-        // Get current output run file 
-        BufferedWriter writer = new BufferedWriter(new FileWriter(fName + (currentRunFile + numFiles), true));
-        while (true) {
-            if (value == "{RUN}") {
-                activeReaders[fNum] = 0; // Give reader inactive flag
-            }
-            
-            if (activeReaders[fNum] == 1) {
-                // Output the smallest value
-                writer.write(value);
+        int inputSetIndex = 0;
 
-                // Raplce value in heap with next value from same file
-                mergeMinHeap.replace(new String[] {readers[fNum].readLine(), fName + fNum});
+        // Merge all runs
+        int filesLeft = 0;
+        while (filesLeft != 1) {
+            // Process a run from each file together
+            boolean allFilesDone = false;
+            filesLeft = 0;
+            while (!allFilesDone) {
+                // Create merge minheap
+                MyMergeMinHeap mergeMinHeap = new MyMergeMinHeap(numFiles);
 
-                // Output smallest value to output next
-                value = mergeMinHeap.peek();
-                source = mergeMinHeap.peekSource();
-                fNum = Integer.parseInt(source.substring(source.length() - 1, source.length()));
-            }
-
-            boolean done = true;
-            for (int i = 0; i < activeReaders.length; i++) {
-                if (activeReaders[i] == 1) {
-                    done = false;
+                // Read intial values from each initial run into heap
+                for (int rNum = 0; rNum < readers[inputSetIndex].length; rNum++) {
+                    // Insert line from run and filename into heap
+                    String value = readers[inputSetIndex][rNum].readLine();
+                    String source = fName + fileNums[inputSetIndex][rNum];
+                    if (value != null) {
+                        mergeMinHeap.insert(new String[] {value, source});
+                    }
                 }
+
+                // Get smallest value from heap
+                String value = mergeMinHeap.peek();
+                String source = mergeMinHeap.peekSource();
+                if (value == null) {
+                    break;
+                }
+                int fNum = calcReadFileNum(source);
+
+                // Get current output run file 
+                BufferedWriter writer = new BufferedWriter(new FileWriter(fName + fileNums[outputSetIndex][outputFileIndex], true));
+                while (mergeMinHeap.getSize() > 0) {        
+                    if (activeReaders[fNum-1] == 1) {
+                        if (value == null) {
+                            activeReaders[fNum-1] = 0; // Give reader inactive flag
+                            mergeMinHeap.remove();
+                        } else if (value.equals("{RUN}")) {
+                            activeReaders[fNum-1] = 0; // Give reader inactive flag
+                            mergeMinHeap.remove();
+                        } else {
+                            // Output the smallest value
+                            System.out.println(value);
+                            writer.write(value + "\n");
+                            // Raplce value in heap with next value from same file
+                            mergeMinHeap.replace(new String[] {readers[inputSetIndex][fNum-1].readLine(), fName + fNum});
+                        }
+
+                        // Output smallest value to output next
+                        value = mergeMinHeap.peek();
+                        source = mergeMinHeap.peekSource();
+                        fNum = calcReadFileNum(source);
+                    } else {
+                        break;
+                    }
+                }
+
+                // Setup output file index for next run
+                writer.write("{RUN}" + "\n");
+                outputFileIndex ++;
+                if (outputFileIndex > numFiles-1) {
+                    outputFileIndex = 0;
+                }
+
+                writer.flush();
+                writer.close();
+
+                // Check if this run is done
+                allFilesDone = true;
+                for (int i = 0; i < activeReaders.length; i++) {
+                    if (activeReaders[i] == 0) {
+                        allFilesDone = false;
+                    }
+                }
+                filesLeft ++;
             }
-            if (done) {
-                break;
+            // Reset active readers
+            for (int i = 0; i < activeReaders.length; i++) {
+                activeReaders[i] = 1;
             }
+
+            // Toggle input and output set indices between 0 and 1 for next run
+            outputSetIndex = 1 - outputSetIndex;
+            inputSetIndex = 1 - inputSetIndex;
         }
-        writer.flush();
-        writer.close();
+    }
+
+    //
+    // Calculate and return read file Num
+    //
+    public static int calcReadFileNum(String source) {
+        int fNum = Integer.parseInt(source.substring(source.length() - 1));
+        return fNum;
     }
 }
