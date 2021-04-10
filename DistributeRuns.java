@@ -67,8 +67,5 @@ public class DistributeRuns {
         } catch (Exception e) {
             System.out.println(e);
         }
-
-
-
     }
 }
