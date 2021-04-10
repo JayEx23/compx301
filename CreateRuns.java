@@ -1,14 +1,20 @@
+//
+// Names:   Jesse Reyneke-Barnard   ,   Eugene Chew
+// IDs:     1351388                 ,   1351553
+//
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
 //
-// CreateRuns class
+// CreateRuns classs
 //
 public class CreateRuns {
     //
-    // Main method
+    // Main method: program entry point
+    // Takes in args: command line arguments
     //
     public static void main(String[] args) {
         String msgUsage = new String("Usage: java CreateRuns [heap-size]");
@@ -20,9 +26,10 @@ public class CreateRuns {
         int heapSize = 0;
         try { // Check heap size command line args
             heapSize = Integer.parseInt(args[0]);
-        } catch(Exception e) {
-            System.out.println(e);
-            System.out.println(msgUsage);
+        } catch (Exception e) {
+            System.err.println(e);
+            System.err.println(msgUsage);
+            e.printStackTrace();
             return;
         }
 
@@ -30,7 +37,8 @@ public class CreateRuns {
     }
 
     //
-    // Read standard input
+    // Load standard input, perform replacement selection and output to stnadard
+    // output. Takes in heapsize: int number specifying size of heap
     //
     public static void load(int heapSize) {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -38,20 +46,24 @@ public class CreateRuns {
         MyMinHeap minheap = new MyMinHeap(heapSize);
         String[] lines = new String[heapSize];
         try {
-            // Load initial lines into heap
+            // store initial lines for heap load operation
             for (int i = 0; i < heapSize; i++) {
                 String line = reader.readLine();
                 if (line != null) {
                     lines[i] = line;
+                } else {
+                    break;
                 }
-                else { break; }
             }
+            // Load initial lines into heap and reheap
             minheap.load(lines);
             minheap.reheap();
-            
+
             String line = minheap.peek();
             String prevLine = line;
-            while (line != null) {                
+            while (line != null) { // while there are still lines to read
+                // checks to see if the current line is greater than the previous
+                // line
                 if (line.compareTo(prevLine) >= 0) {
                     writer.write(line + "\n");
                     String newLine = reader.readLine();
@@ -65,11 +77,11 @@ public class CreateRuns {
                     line = minheap.peek();
                 }
 
-                if (minheap.getSize() == 0) {
-                    writer.write("{RUN}\n");
+                if (minheap.getSize() == 0) { // check if there are still items in the minHeap
+                    writer.write("{RUN}\n"); // Write explicit run separator
                     minheap.reset();
                     minheap.reheap();
-                    
+
                     line = minheap.peek();
                     prevLine = line;
                 }
@@ -78,8 +90,10 @@ public class CreateRuns {
             writer.flush();
             reader.close();
             writer.close();
-        } catch(Exception e) {
-            System.out.println(e);
+        } catch (Exception e) {
+            // print error
+            System.err.println(e);
+            e.printStackTrace();
         }
     }
 }

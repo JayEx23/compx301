@@ -1,9 +1,19 @@
-public class MyMergeMinHeap implements IMinHeap<String[]> {
+//
+// Names:   Jesse Reyneke-Barnard   ,   Eugene Chew
+// IDs:     1351388                 ,   1351553
+//
 
+//
+// This is a string array minheap class to store value as well as value source/origin destination
+//
+public class MyMergeMinHeap implements IMinHeap<String[]> {
+    // Declare prvate fields
     private int _size;
     private String[][] _minHeap;
 
+    //
     // The constructor for minHeap object
+    //
     public MyMergeMinHeap(int size) {
         if (size < 1) { // Use default size
             _minHeap = new String[32][2];
@@ -15,7 +25,10 @@ public class MyMergeMinHeap implements IMinHeap<String[]> {
 
     }
 
+    //
     // Insert into heap
+    // Takes in value: string[] value to insert (index 0:value, 1:source)
+    //
     public void insert(String[] value) {
         if (_size == _minHeap.length) {
             System.out.println("Warning: minheap is full -- could not insert value!");
@@ -27,7 +40,9 @@ public class MyMergeMinHeap implements IMinHeap<String[]> {
         }
     }
 
-    // Remove from heap
+    //
+    // Remove root item in heap
+    //
     public void remove() {
         if (_size > 0) {
             int root = 0;
@@ -41,19 +56,16 @@ public class MyMergeMinHeap implements IMinHeap<String[]> {
         }
     }
 
-    // peek
-    public String peek() {
-        return _minHeap[0][0];
-    }
-
-    // peek source
-    public String peekSource() {
-        return _minHeap[0][1];
+    //
+    // Return string[] root item in minheap (index 0:value, 1:source)
+    //
+    public String[] peek() {
+        return _minHeap[0];
     }
 
     // load values into heap without regard for heap order
-    // args - values: a string collection to load into our heap, along with names of sources for
-    // where these values came from
+    // args - values: a string[] collection to load into our heap, along with names
+    // of sources for where these values came from
     public void load(String[][] values) {
         // Check if input values are in correct format
         if (values[0].length < 2 && values[0].length > 2) {
@@ -62,7 +74,7 @@ public class MyMergeMinHeap implements IMinHeap<String[]> {
         }
         _size = 0;
         // Load values
-        for (int sourceIndex = 0; sourceIndex < 2; sourceIndex ++) {
+        for (int sourceIndex = 0; sourceIndex < 2; sourceIndex++) {
             for (int i = 0; i < _minHeap.length; i++) {
                 if (i >= values.length) {
                     break;
@@ -78,16 +90,23 @@ public class MyMergeMinHeap implements IMinHeap<String[]> {
     }
 
     // Replace root in heap with new value and maintain heap order
-    // args - value: the new value
+    // args - value: the new string[] value (index 0:value, 1:source)
     public void replace(String[] value) {
         _minHeap[0][0] = value[0];
         _minHeap[0][1] = value[1];
         if (value[0] == null) {
+            // Handle null values by removing them first (moving to back of heap then
+            // decreasing size)
+            // before downheaping, as downheap operation cannot handle null values
             remove();
-        } else { downheap(0); }
+        } else {
+            downheap(0);
+        }
     }
 
+    //
     // Put heap array back into heap order
+    //
     public void reheap() {
         int i = lastParentIndex();
         while (i >= 0) {
@@ -96,22 +115,28 @@ public class MyMergeMinHeap implements IMinHeap<String[]> {
         }
     }
 
-    // Get size
+    //
+    // Return heap artificial size
+    //
     public int getSize() {
         return _size;
     }
 
+    //
     // Reset minheap size
+    //
     public void reset() {
         for (int i = 0; i < _minHeap.length; i++) {
             if (_minHeap[i][0] != null) {
                 swap(_size, i);
-                _size ++;
+                _size++;
             }
         }
     }
 
+    //
     // Upheap array
+    //
     private void upheap() {
         // Iterate from bottom to top
         int i = _size - 1;
@@ -128,7 +153,9 @@ public class MyMergeMinHeap implements IMinHeap<String[]> {
         }
     }
 
+    //
     // Downheap from provided index
+    //
     private void downheap(int current) {
         // Iterate from the given index
         if (_size < 2) {
@@ -154,7 +181,9 @@ public class MyMergeMinHeap implements IMinHeap<String[]> {
         }
     }
 
+    //
     // Swaps the position of 2 index/items in the array
+    //
     private void swap(int j, int k) {
         String tempVal = _minHeap[j][0];
         String tempSource = _minHeap[j][1];
@@ -166,22 +195,30 @@ public class MyMergeMinHeap implements IMinHeap<String[]> {
         _minHeap[k][1] = tempSource;
     }
 
+    //
     // Get parent index
+    //
     private int parentIndex(int current) {
         return (current - 1) / 2; // (current-1) because our heap array's first item starts at index 0
     }
 
+    //
     // Get left child index
+    //
     private int leftChildIndex(int current) {
         return ((current + 1) * 2) - 1; // (current+1*2)-1 because our heap array's first item starts at index 0
     }
 
+    //
     // Get right child index
+    //
     private int rightChildIndex(int current) {
         return ((current + 1) * 2); // (current+1)*2 because our heap array's first item starts at index 0
     }
 
+    //
     // Get index of last parent item in heap
+    //
     private int lastParentIndex() {
         return parentIndex(_size - 1); // (_size-1) instead of _size because our heap starts at index=0
     }
